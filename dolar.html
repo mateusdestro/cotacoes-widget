@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de Dados e Gráfico Interativo do Dólar</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .info-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px; /* Largura do gráfico ajustada */
+        }
+        .info {
+            border: 2px solid black; /* Alteração na largura da borda */
+            padding: 10px;
+            margin: 5px;
+            flex: 1;
+            text-align: center;
+            box-sizing: border-box;
+            font-family: Calibri; /* Alteração da fonte */
+            font-size: larger; /* Aumento do tamanho da fonte */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centraliza verticalmente */
+            align-items: center; /* Centraliza horizontalmente */
+        }
+        .info p {
+            margin: 5px 0; /* Ajuste das margens */
+        }
+        .info .valor {
+            font-size: x-large; /* Aumento do tamanho da fonte dos valores */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <iframe src="grafico_dolar_interativo.html" width="850" height="450" frameborder="0"></iframe>
+</div>
+
+<div class="container">
+    <div class="info-container">
+        <div class="info">
+            <p><b>Valor mais atual:</b></p>
+            <p class="valor">R$ 5,29</p>
+        </div>
+        <div class="info">
+            <p><b>Média da mesma semana do ano passado:</b></p>
+            <p class="valor">R$ 4,91</p>
+        </div>
+        <div class="info">
+            <p><b>Variação percentual em relação à média do ano passado:</b></p>
+            <p class="valor" style="color: red;">7,74%</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
