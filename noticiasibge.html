@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Últimas Notícias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .news-widget {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .news-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+        .news-date {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .news-content {
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="news-widget" id="newsWidget">
+        <h2>Últimas Notícias</h2>
+        <div id="newsContainer">Carregando...</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const apiURL = 'http://servicodados.ibge.gov.br/api/v3/noticias/';
+            const newsContainer = document.getElementById('newsContainer');
+
+            fetch(apiURL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);  // Log the data for debugging
+                    if (data.items && data.items.length > 0) {
+                        newsContainer.innerHTML = '';
+                        data.items.forEach(news => {
+                            const newsItem = document.createElement('div');
+                            newsItem.className = 'news-item';
+
+                            const newsTitle = document.createElement('div');
+                            newsTitle.className = 'news-title';
+                            const newsLink = document.createElement('a');
+                            newsLink.href = news.link;
+                            newsLink.textContent = news.titulo;
+                            newsLink.target = "_blank";
+                            newsTitle.appendChild(newsLink);
+
+                            const newsDate = document.createElement('div');
+                            newsDate.className = 'news-date';
+                            newsDate.textContent = new Date(news.data_publicacao).toLocaleDateString('pt-BR');
+
+                            const newsContent = document.createElement('div');
+                            newsContent.className = 'news-content';
+                            newsContent.textContent = news.introducao;
+
+                            newsItem.appendChild(newsTitle);
+                            newsItem.appendChild(newsDate);
+                            newsItem.appendChild(newsContent);
+                            newsContainer.appendChild(newsItem);
+                        });
+                    } else {
+                        newsContainer.textContent = 'Nenhuma notícia encontrada.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar notícias:', error);
+                    newsContainer.textContent = 'Erro ao carregar notícias.';
+                });
+        });
+    </script>
+</body>
+</html>
