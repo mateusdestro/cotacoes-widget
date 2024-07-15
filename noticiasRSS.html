@@ -19,6 +19,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .rss-item {
+            display: flex;
+            justify-content: space-between;
             border-bottom: 1px solid #ddd;
             padding: 10px 0;
         }
@@ -27,6 +29,11 @@
         }
         .rss-item p {
             margin: 0;
+        }
+        .rss-image {
+            max-width: 100px;
+            max-height: 100px;
+            margin-left: 20px;
         }
     </style>
 </head>
@@ -66,10 +73,12 @@
                 const title = item.title || 'No title';
                 const link = item.link || '#';
                 const description = item.description || '';
+                const imageUrl = item.enclosure ? item.enclosure.link : '';
 
                 const rssItem = document.createElement("div");
                 rssItem.className = "rss-item";
 
+                const rssContent = document.createElement("div");
                 const rssTitle = document.createElement("h3");
                 const rssLink = document.createElement("a");
                 rssLink.href = link;
@@ -77,12 +86,21 @@
                 rssLink.target = "_blank";
                 rssTitle.appendChild(rssLink);
 
-                rssItem.appendChild(rssTitle);
-                
+                rssContent.appendChild(rssTitle);
+
                 if (description) {
                     const rssDescription = document.createElement("p");
                     rssDescription.innerHTML = description;
-                    rssItem.appendChild(rssDescription);
+                    rssContent.appendChild(rssDescription);
+                }
+
+                rssItem.appendChild(rssContent);
+
+                if (imageUrl) {
+                    const rssImage = document.createElement("img");
+                    rssImage.src = imageUrl;
+                    rssImage.className = "rss-image";
+                    rssItem.appendChild(rssImage);
                 }
 
                 feed.appendChild(rssItem);
