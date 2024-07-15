@@ -1,1 +1,122 @@
-<rssapp-wall id="BzRgVUjmryIkXgwO"></rssapp-wall><script src="https://widget.rss.app/v1/wall.js" type="text/javascript" async></script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSS Reader</title>
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .rss-feed {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .rss-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .rss-item h3 {
+            margin: 0 0 5px 0;
+            font-size: 14px; /* Ajuste o tamanho da fonte aqui */
+        }
+        .rss-item h3 {
+            margin: 0 0 5px 0;
+        }
+        .rss-item p {
+            margin: 0;
+        }
+        .rss-image {
+            max-width: 80px;
+            max-height: 80px;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="rss-feed" id="rss-feed"></div>
+
+    <script>
+        async function fetchRSS(url) {
+            try {
+                const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                if (data.status !== 'ok') {
+                    throw new Error('Error fetching RSS feed');
+                }
+                return data;
+            } catch (error) {
+                console.error('Fetch RSS failed:', error);
+                return null;
+            }
+        }
+
+        function displayRSS(data) {
+            if (!data) {
+                const feed = document.getElementById("rss-feed");
+                feed.innerHTML = '<p>Failed to load RSS feed.</p>';
+                return;
+            }
+            
+            const items = data.items;
+            const feed = document.getElementById("rss-feed");
+            feed.innerHTML = ''; // Clear previous content
+
+            items.forEach(item => {
+                const title = item.title || 'No title';
+                const link = item.link || '#';
+                const description = item.description || '';
+                const imageUrl = item.enclosure ? item.enclosure.link : '';
+
+                const rssItem = document.createElement("div");
+                rssItem.className = "rss-item";
+
+                const rssContent = document.createElement("div");
+                const rssTitle = document.createElement("h3");
+                const rssLink = document.createElement("a");
+                rssLink.href = link;
+                rssLink.textContent = title;
+                rssLink.target = "_blank";
+                rssTitle.appendChild(rssLink);
+
+                rssContent.appendChild(rssTitle);
+
+                if (description) {
+                    const rssDescription = document.createElement("p");
+                    rssDescription.innerHTML = description;
+                    rssContent.appendChild(rssDescription);
+                }
+
+                rssItem.appendChild(rssContent);
+
+                if (imageUrl) {
+                    const rssImage = document.createElement("img");
+                    rssImage.src = imageUrl;
+                    rssImage.className = "rss-image";
+                    rssItem.appendChild(rssImage);
+                }
+
+                feed.appendChild(rssItem);
+            });
+        }
+
+        (async () => {
+            const rssUrl = 'https://br.investing.com/rss/news_11.rss';
+            const rssData = await fetchRSS(rssUrl);
+            displayRSS(rssData);
+        })();
+    </script>
+</body>
+</html>
