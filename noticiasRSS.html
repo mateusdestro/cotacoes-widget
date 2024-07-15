@@ -65,7 +65,7 @@
             items.forEach(item => {
                 const title = item.title || 'No title';
                 const link = item.link || '#';
-                const description = item.description || 'No description';
+                const description = item.description || '';
 
                 const rssItem = document.createElement("div");
                 rssItem.className = "rss-item";
@@ -77,11 +77,14 @@
                 rssLink.target = "_blank";
                 rssTitle.appendChild(rssLink);
 
-                const rssDescription = document.createElement("p");
-                rssDescription.innerHTML = description;
-
                 rssItem.appendChild(rssTitle);
-                rssItem.appendChild(rssDescription);
+                
+                if (description) {
+                    const rssDescription = document.createElement("p");
+                    rssDescription.innerHTML = description;
+                    rssItem.appendChild(rssDescription);
+                }
+
                 feed.appendChild(rssItem);
             });
         }
